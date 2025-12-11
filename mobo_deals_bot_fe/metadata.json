@@ -1,0 +1,7 @@
+{
+  "name": "Copy of Copy of ShopGenie AI",
+  "description": "A modern e-commerce platform featuring a smart Gemini-powered chatbot for deals, order tracking, and support.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
