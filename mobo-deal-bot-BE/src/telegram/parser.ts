@@ -1,4 +1,4 @@
-import { Product } from "../types";
+import { Product } from "../types.js";
 
 export function parseDeals(text: string): Product[] {
   if (!text) return [];

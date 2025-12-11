@@ -1,15 +1,15 @@
-import { env } from "./config/env";
+import { env } from "./config/env.js";
 import express from "express";
 import cors from "cors";
 import helmet from "helmet";
 import morgan from "morgan";
 import rateLimit from "express-rate-limit";
-import { connectDb } from "./config/db";
-import authRoutes from "./routes/auth";
-import productRoutes from "./routes/products";
-import orderRoutes from "./routes/orders";
-import chatRoutes from "./routes/chatOpenAI";
-import { errorHandler } from "./middleware/error";
+import { connectDb } from "./config/db.js";
+import authRoutes from "./routes/auth.js";
+import productRoutes from "./routes/products.js";
+import orderRoutes from "./routes/orders.js";
+import chatRoutes from "./routes/chatOpenAI.js";
+import { errorHandler } from "./middleware/error.js";
 
 const app = express();
 

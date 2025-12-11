@@ -1,11 +1,11 @@
 import { Router } from "express";
 import { z } from "zod";
 import { GoogleGenAI, Type, Schema } from "@google/genai";
-import { ProductModel } from "../models/Products";
-import { OrderModel } from "../models/Order";
-import { ChatModel } from "../models/Chat";
-import { env } from "../config/env";
-import { AIResponseSchema, Product, Order } from "../types";
+import { ProductModel } from "../models/Products.js";
+import { OrderModel } from "../models/Order.js";
+import { ChatModel } from "../models/Chat.js";
+import { env } from "../config/env.js";
+import { AIResponseSchema, Product, Order, OrderStatus, OrderItem } from "../types.js";
 
 const router = Router();
 const MODEL_NAME = "gemini-2.5-flash"; 
@@ -52,27 +52,36 @@ router.post("/", async (req, res, next) => {
 
     const productsDto: Product[] = productList.map((p) => ({
       id: p._id.toString(),
-      title: p.title,
+      title: p.title ?? "",
       description: p.description ?? "",
-      price: p.price,
-      category: p.category,
-      image: p.image,
-      rating: p.rating,
-      tags: p.tags,
-      platform: p.platform,
-      dealType: p.dealType,
+      price: p.price ?? 0,
+      category: p.category ?? "",
+      image: p.image ?? "",
+      rating: p.rating ?? 0,
+      tags: Array.isArray(p.tags) ? p.tags : [],
+      platform: p.platform ?? "Other",
+      dealType: p.dealType ?? "Discount",
     }));
+    
+    const ordersDto: Order[] = orderList.map((o) => {
+      const createdAtValue = o.createdAt as Date | string | undefined;
 
-    const ordersDto: Order[] = orderList.map((o) => ({
-      id: o._id.toString(),
-      userId: o.userId,
-      items: o.items as any,
-      total: o.total,
-      status: o.status,
-      paymentStatus: o.paymentStatus,
-      paymentMethod: o.paymentMethod,
-      createdAt: o.createdAt,
-    }));
+      return {
+        id: o._id.toString(),
+        userId: o.userId?.toString?.() ?? "",
+        items: (Array.isArray(o.items) ? o.items : []) as OrderItem[],
+        total: o.total ?? 0,
+        status: Object.values(OrderStatus).includes(o.status as OrderStatus)
+          ? (o.status as OrderStatus)
+          : OrderStatus.Processing,
+        paymentStatus: o.paymentStatus ?? "Pending",
+        paymentMethod: o.paymentMethod ?? "",
+        createdAt:
+          createdAtValue instanceof Date
+            ? createdAtValue.toISOString()
+            : String(createdAtValue ?? ""),
+      };
+    });
 
     const productCatalog = productsDto.map((p) => ({
       id: p.id,

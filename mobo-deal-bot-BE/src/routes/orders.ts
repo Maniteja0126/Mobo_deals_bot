@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { z } from "zod";
-import { OrderModel } from "../models/Order";
-import { OrderStatus } from "../types";
+import { OrderModel } from "../models/Order.js";
+import { OrderStatus } from "../types.js";
 
 const router = Router();
 
