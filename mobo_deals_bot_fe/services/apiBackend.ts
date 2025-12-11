@@ -1,6 +1,7 @@
 import { User , Product , Order , OrderStatus, AIResponseSchema} from "../types";
 
-const API_BASE =  process.env.API_BASE ||  "http://localhost:3000/api"
+const API_BASE = import.meta.env.VITE_API_BASE;
+
 
 async function request<T>(path:string, options? : RequestInit) : Promise<T> {
     const res = await fetch(`${API_BASE}${path}` , {
